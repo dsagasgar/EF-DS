@@ -8,7 +8,7 @@ proxyRouter.use("/api/peru", createProxyMiddleware({
     target: services.peruService,
     changeOrigin: true,
     pathRewrite: {
-        "^/": "/api/peru"
+        "^/": "/api/peru/"
     }
 }));
 
@@ -16,7 +16,7 @@ proxyRouter.use("/api/extranjero", createProxyMiddleware({
     target: services.extranjeroService,
     changeOrigin: true,
     pathRewrite: {
-        "^/": "/api/extranjero"
+        "^/": "/api/extranjero/"
     }
 }));
 
