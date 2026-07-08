@@ -1,0 +1,10 @@
+DB
+votos-regiones
+- id
+- continente
+- votosSanchez
+- votosFujimori
+- actas
+api:
+/extranjero
+/extranjero/continente/:continente

@@ -1,0 +1,11 @@
+DB
+votos-regiones
+- id
+- region
+- votosSanchez
+- votosFujimori
+- actas
+
+api:
+/peru
+/peru/region/:region

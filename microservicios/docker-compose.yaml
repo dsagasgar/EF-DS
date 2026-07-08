@@ -1,0 +1,85 @@
+services:
+
+  mysql-peru:
+    image: mysql:8.4
+    container_name: peru-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordpassword
+      MYSQL_DATABASE: perudb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_peru_data:/var/lib/mysql
+    networks:
+      - app-electoral-network
+
+  mysql-extranjero:
+    image: mysql:8.4
+    container_name: extranjero-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: passwordpassword
+      MYSQL_DATABASE: extranjerodb
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_extranjero_data:/var/lib/mysql
+    networks:
+      - app-electoral-network
+
+  gateway-service:
+    image: gateway-service:1.0
+    container_name: gateway-service
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      PERU_SERVICE_URL: http://peru-service:3001
+      EXTRANJERO_SERVICE_URL: http://extranjero-service:3002
+    depends_on:
+      - peru-service
+      - extranjero-service
+    networks:
+      - app-electoral-network
+
+
+  peru-service:
+    image: peru-service:1.0
+    container_name: peru-service
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DATABASE_URL: mysql://root:passwordpassword@mysql-peru:3306/perudb
+    depends_on:
+      - mysql-peru
+    networks:
+      - app-electoral-network
+
+
+  extranjero-service:
+    image: extranjero-service:1.0
+    container_name: extranjero-service
+    restart: unless-stopped
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      DATABASE_URL: mysql://root:passwordpassword@mysql-extranjero:3306/extranjerodb
+    depends_on:
+      - mysql-extranjero
+    networks:
+      - app-electoral-network
+
+
+volumes:
+  mysql_peru_data:
+  mysql_extranjero_data:
+
+
+networks:
+  app-electoral-network:
+    driver: bridge

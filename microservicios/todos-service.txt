@@ -1,0 +1,10 @@
+DB
+votos
+- id
+- seccion(peru/extranjero)
+- votosSanchez
+- votosFujimori
+- actas
+
+api:
+/todos
